@@ -5,10 +5,12 @@ import math
 class coordPoint:
     lat : float = 0.0
     lon : float = 0.0
+    price : int = 0
 
-    def __init__(self, lat: float, lon: float):
+    def __init__(self, lat: float, lon: float, p: int = 0):
         self.lat = lat
         self.lon = lon
+        self.price = p
 
     @property
     def Lat(self) -> float:
@@ -18,11 +20,21 @@ class coordPoint:
     def Lon(self) -> float:
         return self.lon
 
+    @property
+    def Price(self) -> int:
+        return self.price
+    
+    def setPrice(self, p : int):
+        self.Price = p
+
     def printCoord(self):
         print(f"Latitude: {self.Lat}  Longitude: {self.Lon}")
+
+    def printInfo(self):
+        print(f"Latitude: {self.Lat}  Longitude: {self.Lon} Price: {self.Price}")
     
     def isZero(self) -> bool:
-        return self.Lat == 0.0 and self.Lon == 0.0
+        return self.Lat == 0.0 or self.Lon == 0.0
 
 
 class coordStorageReader:
@@ -32,6 +44,9 @@ class coordStorageReader:
     startPoint : coordPoint = coordPoint(0.0, 0.0)
     currPoint : coordPoint = coordPoint(0.0, 0.0)
     nextPoint : coordPoint = coordPoint(0.0, 0.0)
+    finishPoint : coordPoint = coordPoint(0.0, 0.0)
+    maxDistanceFromStart : int = 715 / 2
+
 
     def __init__(self):
         pass
@@ -76,14 +91,14 @@ class coordStorageReader:
         self.getStartPoint.printCoord()
         print(f"Next point of given list:")
         for p in self.coordList:
-            p.printCoord()
+            p.printInfo()
 
     def printSortedCoords(self):
         print(f"Start point:")
         self.getStartPoint.printCoord()
         print(f"Next points of sortedlist:")
         for p in self.sortedCoordList:
-            p.printCoord()
+            p.printInfo()
 
     def readFromFile(self, coFilePath: str):
         with open(coFilePath, 'r') as file:
@@ -117,8 +132,9 @@ class coordStorageReader:
         else:
             self.setCurrPoint(self.sortedCoordList[-1])
         min_dst = float('inf')
+        tmp_coord_list : list = self.coordList
         earthRad : int = 6371 #Earth radius in KM
-        for cP in self.coordlist:
+        for cP in tmp_coord_list:
             dLat : float = (cP.Lat - self.currPoint.Lat) * math.pi / 180
             dLon : float = (cP.Lon - self.currPoint.Lon) * math.pi / 180
             a : float = math.sin(dLat / 2) * math.sin((dLat / 2) + 
