@@ -20,14 +20,11 @@ def main() -> int:
     
     coordstorage.readFromFile("/home/sensenet/Apps/PROJ/py/coord_parser/champ_coords")
     coordstorage.printCoords()
-    ptr : int  = 0
-    noSortedListSize : int = len(coordstorage.coordList)
-    while ptr < noSortedListSize:
-        coordstorage.findClosestPoint()   
-        ptr += 1
+    coordstorage.sortArrayByDistanceToStart()
     
     coordstorage.printSortedCoords()
     coordstorage.writeSortedToFile("/home/sensenet/Apps/PROJ/py/coord_parser/champ_coords_sorted")
+    print(coordstorage.findBestPrice())
     #showMap(mapOfRu)
     return 0
 
