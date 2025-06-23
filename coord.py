@@ -1,5 +1,6 @@
 import os
 import math
+import re
 
 
 class coordPoint:
@@ -104,9 +105,13 @@ class coordStorageReader:
         with open(coFilePath, 'r') as file:
             lines = file.readlines()
             for line in lines:
-                coords = line.strip().split(',')
+                coords = re.split(r'[,, ]+', line)
                 try:
-                    point = coordPoint(float(coords[0]), float(coords[1]))
+                    point : coordPoint
+                    if(len(coords) < 3):
+                        point = coordPoint(float(coords[0]), float(coords[1]))
+                    else:
+                        point = coordPoint(float(coords[0]), float(coords[1]), int(coords[2]))
                     if(point.isZero()):
                         print("No storing to zero point. Pass...")
                         continue
@@ -120,7 +125,7 @@ class coordStorageReader:
     def writeSortedToFile(self, coFilePath: str):
         with open(coFilePath, 'w') as file:
             for cP in self.sortedCoordList:
-                file.write(f"Latitude: {cP.Lat}  Longitude: {cP.Lon}\n")
+                file.write(f"Latitude: {cP.Lat},  Longitude: {cP.Lon},  Price: {cP.Price}\n")
 
     def findClosestPoint(self):
         if(len(self.coordlist) <= 0 or self.startPoint.isZero()):
