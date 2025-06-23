@@ -1,6 +1,8 @@
 # routeOptimizer 
 # for BusyButt motorcycle championship and others...
+
 Small python utilities for get list of Lat\Lon-PRICE format coords with weight from file and sort it by distance nearest from start point.
+
 TODO:
     * Optimize classes system
     * Optimize API
